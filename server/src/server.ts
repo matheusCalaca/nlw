@@ -3,6 +3,7 @@ import express  from "express";
 // 
 
 const app = express();
+app.use(express.json());
 
 const users = [
     'mathesu',
@@ -12,8 +13,9 @@ const users = [
 
 app.get("/user", (request, response) => {
     console.log('listagem de usuarios');
-    
-    return response.json(users);
+    const search = String(request.query.search);
+    const userFilter = search ? users.filter(user => user.includes(search)) : users
+    return response.json(userFilter);
 });
 
 
@@ -24,10 +26,10 @@ app.get("/user/:id", (request, response) => {
 });
 
 app.post("/user", (request, response) => {
-   
+   const data = request.body;
     const user = {
-        name: 'Diego',
-        email: 'diego@gmeil.com'
+        name: data.name,
+        email: data.email
     }
     return response.json(user);
 });
