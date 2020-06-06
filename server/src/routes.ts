@@ -27,7 +27,7 @@ routes.post("/points", async (request, response) => {
         items
     } = request.body;
 
-    await Knex('points').insert({
+    const ids = await Knex('points').insert({
         image: 'image-fake',
         name,
         email,
@@ -38,7 +38,16 @@ routes.post("/points", async (request, response) => {
         uf
     });
 
-    return response.json({sucesso: true});
+    const pointItems = items.map((item_id: Number) => {
+        return {
+            items_id: item_id,
+            point_id: ids[0],
+        }
+    });
+
+    await Knex('point_items').insert(pointItems);
+
+    return response.json({ sucesso: true });
 });
 
 export default routes;
