@@ -1,14 +1,12 @@
 import React from 'react';
 import './App.css';
 
-import Header from './Header';
+import Home from './Pages/Home'
 
-function App() {
+const  App = () => {
   return (
-    <div>
-
-      <Header title="Hello word"/>
-      <h1>Conteudo</h1>
+    <div> 
+      <Home />
     </div>
   );
 }
