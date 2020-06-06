@@ -12,10 +12,15 @@ class PointsController {
 
         if (!point) {
             return response.status(400).json({ mensage: 'point not found' });
-        } else {
-            return response.json(point);
-
         }
+
+        const items = await Knex('items')
+            .join('point_items', 'items.id', '=', 'point_items.items_id')
+            .where('point_items.point_id', id)
+            ;
+
+        return response.json({point, items});
+
     }
 
     async create(request: Request, response: Response) {
