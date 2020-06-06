@@ -59,7 +59,7 @@ class PointsController {
         } = request.body;
 
         const point = {
-            image: 'image-fake',
+            image: 'https://wow.olympus.eu/webfile/img/1632/oly_testwow_stage.jpg?x=400',
             name,
             email,
             latitude,
