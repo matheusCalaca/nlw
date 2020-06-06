@@ -14,9 +14,7 @@ class PointsController {
             items
         } = request.body;
 
-        const trx = await Knex.transaction();
-
-        const insertedIds = await trx('points').insert({
+        const point = {
             image: 'image-fake',
             name,
             email,
@@ -25,7 +23,11 @@ class PointsController {
             whatsapp,
             city,
             uf
-        });
+        };
+
+        const trx = await Knex.transaction();
+
+        const insertedIds = await trx('points').insert(point);
 
         const point_id = insertedIds[0];
 
@@ -37,7 +39,10 @@ class PointsController {
         });
 
         await trx('point_items').insert(pointItems);
-        return response.json({ sucesso: true });
+        return response.json({
+            id: point_id,
+            ...point
+        });
     }
 
 
