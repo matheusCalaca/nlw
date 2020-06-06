@@ -2,6 +2,22 @@ import { Request, Response } from 'express';
 import Knex from '../database/connection';
 
 class PointsController {
+
+
+    async show(request: Request, response: Response) {
+
+        const { id } = request.params;
+
+        const point = await Knex('points').where('id', id).first();
+
+        if (!point) {
+            return response.status(400).json({ mensage: 'point not found' });
+        } else {
+            return response.json(point);
+
+        }
+    }
+
     async create(request: Request, response: Response) {
         const {
             name,
