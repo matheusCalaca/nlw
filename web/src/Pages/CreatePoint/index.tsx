@@ -28,7 +28,7 @@ const CreatePoint = () => {
     const [items, setItems] = useState<Item[]>([])
     const [ufs, setUfs] = useState<string[]>([])
     const [cities, setCities] = useState<string[]>([])
-    
+
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -37,9 +37,10 @@ const CreatePoint = () => {
 
     const [selectedUf, setSelectedUF] = useState('0');
     const [selectedCity, setSelectedCity] = useState('0');
+    const [selectedItems, setSelectedItems] = useState<number[]>([]);
     const [selectedPosition, setSelectedPosition] = useState<[number, number]>([0, 0]);
     const [initalPosition, setInitialPosition] = useState<[number, number]>([0, 0]);
-    
+
 
 
     useEffect(() => {
@@ -50,9 +51,9 @@ const CreatePoint = () => {
 
 
     useEffect(() => {
-        
+
         navigator.geolocation.getCurrentPosition(position => {
-            const {latitude, longitude} = position.coords;
+            const { latitude, longitude } = position.coords;
             setInitialPosition([latitude, longitude])
         })
     }, []);
@@ -96,14 +97,24 @@ const CreatePoint = () => {
             event.latlng.lng,
         ]);
     }
-    
+
     function handelInputChange(event: ChangeEvent<HTMLInputElement>) {
-        const {name, value} = event.target
+        const { name, value } = event.target
         setFormData({
             ...formData, [name]: value
         })
     }
-    
+
+    function handleSelectItem(id: number) {
+        const alredySelected = selectedItems.findIndex(item => item === id);
+        if (alredySelected >= 0) {
+            const filteredItems = selectedItems.filter(item => item != id);
+            setSelectedItems(filteredItems);
+        } else {
+            setSelectedItems([...selectedItems, id]);
+        }
+    }
+
 
     return (
         <div id="page-create-point">
@@ -217,7 +228,9 @@ const CreatePoint = () => {
                     </legend>
                     <ul className="items-grid" >
                         {items.map(item => (
-                            <li key={item.id}>
+                            <li key={item.id} onClick={() => handleSelectItem(item.id)}
+                                className={selectedItems.includes(item.id) ? 'selected' : ''}
+                            >
                                 <img src={item.image_url} alt={item.title} />
                                 <span>{item.title}</span>
                             </li>
