@@ -28,11 +28,18 @@ const CreatePoint = () => {
     const [items, setItems] = useState<Item[]>([])
     const [ufs, setUfs] = useState<string[]>([])
     const [cities, setCities] = useState<string[]>([])
+    
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        whatsapp: '',
+    });
 
     const [selectedUf, setSelectedUF] = useState('0');
     const [selectedCity, setSelectedCity] = useState('0');
     const [selectedPosition, setSelectedPosition] = useState<[number, number]>([0, 0]);
     const [initalPosition, setInitialPosition] = useState<[number, number]>([0, 0]);
+    
 
 
     useEffect(() => {
@@ -90,6 +97,13 @@ const CreatePoint = () => {
         ]);
     }
     
+    function handelInputChange(event: ChangeEvent<HTMLInputElement>) {
+        const {name, value} = event.target
+        setFormData({
+            ...formData, [name]: value
+        })
+    }
+    
 
     return (
         <div id="page-create-point">
@@ -113,6 +127,7 @@ const CreatePoint = () => {
                             type="text"
                             name="name"
                             id="name"
+                            onChange={handelInputChange}
                         />
                     </div>
                     <div className="field-group">
@@ -124,6 +139,7 @@ const CreatePoint = () => {
                                 type="email"
                                 name="email"
                                 id="email"
+                                onChange={handelInputChange}
                             />
                         </div>
 
@@ -135,6 +151,7 @@ const CreatePoint = () => {
                                 type="text"
                                 name="whatsapp"
                                 id="whatsapp"
+                                onChange={handelInputChange}
                             />
                         </div>
                     </div>
