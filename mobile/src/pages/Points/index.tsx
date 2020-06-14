@@ -1,9 +1,25 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'
 import Constants from 'expo-constants';
+import { Feather as Icon } from '@expo/vector-icons';
 
 const Points = () => {
-    return <View />;
+
+    const navigation = useNavigation()
+
+    function handelNavigationBack(){
+        navigation.goBack();
+    }
+
+
+    return (
+        <View style={styles.container} >
+            <TouchableOpacity onPress={handelNavigationBack}>
+                <Icon name="arrow-left" size={20} color="#34cb79" />
+            </TouchableOpacity>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
