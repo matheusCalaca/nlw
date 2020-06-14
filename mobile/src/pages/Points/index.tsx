@@ -76,8 +76,6 @@ const Points = () => {
                 items: [1, 2]
             }
         }).then(response => {
-            console.log(response.data);
-
             setPoints(response.data);
         })
     }, []);
