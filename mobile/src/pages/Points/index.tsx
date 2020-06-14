@@ -18,6 +18,7 @@ const Points = () => {
 
     const navigation = useNavigation();
     const [items, setItems] = useState<Item[]>([]);
+    const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
 
     useEffect(() => {
@@ -34,6 +35,16 @@ const Points = () => {
 
     function handelNavigationDetail() {
         navigation.navigate('Detail');
+    }
+
+    function handleSelectItem(id: number) {
+        const alredySelected = selectedItems.findIndex(item => item === id);
+        if (alredySelected >= 0) {
+            const filteredItems = selectedItems.filter(item => item != id);
+            setSelectedItems(filteredItems);
+        } else {
+            setSelectedItems([...selectedItems, id]);
+        }
     }
 
     return (
@@ -84,7 +95,15 @@ const Points = () => {
                     }} >
 
                     {items.map(item => (
-                        <TouchableOpacity key={String(item.id)} style={styles.item} onPress={() => { }}>
+                        <TouchableOpacity
+                            key={String(item.id)}
+                            style={[
+                                styles.item,
+                                selectedItems.includes(item.id) ? styles.selectedItem : {}
+                            ]}
+                            onPress={() => handleSelectItem(item.id)}
+                            activeOpacity={0.6}
+                        >
                             <SvgUri width={42} height={42} uri={item.image_url} />
                             <Text style={styles.itemTitle}>{item.title}</Text>
                         </TouchableOpacity>
