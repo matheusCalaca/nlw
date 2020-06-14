@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native'
 import Constants from 'expo-constants';
 import { Feather as Icon } from '@expo/vector-icons';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { SvgUri } from 'react-native-svg';
 
 
@@ -27,7 +27,31 @@ const Points = () => {
                 <Text style={styles.description}>Encontre no mapa um ponto de coleta.</Text>
 
                 <View style={styles.mapContainer}>
-                    <MapView style={styles.map} />
+                    <MapView style={styles.map}
+                        initialRegion={{
+                            latitude: -16.6868555,
+                            longitude: -49.3006254,
+                            latitudeDelta: 0.012,
+                            longitudeDelta: 0.014,
+                        }}
+                    >
+                        <Marker
+                            style={styles.mapMarker}
+                            onPress={() => {}}
+                            coordinate={{
+                                latitude: -16.6868555,
+                                longitude: -49.3006254,
+                            }}
+                        >
+                            <View style={styles.mapMarkerContainer}>
+                                <Image
+                                    style={styles.mapMarkerImage}
+                                    source={{ uri: 'https://wow.olympus.eu/webfile/img/1632/oly_testwow_stage.jpg?x=400' }}
+                                />
+                                <Text style={styles.mapMarkerTitle}>Mercado</Text>
+                            </View>
+                        </Marker>
+                    </MapView>
 
                 </View>
             </View>
