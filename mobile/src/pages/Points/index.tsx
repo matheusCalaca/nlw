@@ -14,11 +14,20 @@ interface Item {
     image_url: string,
 }
 
+interface Point {
+    id: number,
+    image: string,
+    name: string,
+    latitude: number,
+    longitude: number,
+}
+
 
 const Points = () => {
 
     const navigation = useNavigation();
     const [items, setItems] = useState<Item[]>([]);
+    const [points, setPoints] = useState<Point[]>([]);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
     const [initialPosition, setInitialPosition] = useState<[number, number]>([0, 0]);
 
@@ -58,11 +67,26 @@ const Points = () => {
         )
     }, []);
 
+    useEffect(() => {
+
+        api.get('points', {
+            params: {
+                city: 'GOIANIA',
+                uf: 'GO',
+                items: [1, 2]
+            }
+        }).then(response => {
+            console.log(response.data);
+            
+            setPoints(response.data);
+        })
+    }, []);
+
     function handelNavigationBack() {
         navigation.goBack();
     }
 
-    function handelNavigationDetail() {
+    function handelNavigationDetail(id: number) {
         navigation.navigate('Detail');
     }
 
@@ -89,7 +113,7 @@ const Points = () => {
                 <View style={styles.mapContainer}>
                     {
                         initialPosition[0] !== 0 && (<MapView style={styles.map}
-                            
+
                             initialRegion={{
                                 latitude: initialPosition[0],
                                 longitude: initialPosition[1],
@@ -97,22 +121,27 @@ const Points = () => {
                                 longitudeDelta: 0.014,
                             }}
                         >
-                            <Marker
-                                style={styles.mapMarker}
-                                onPress={handelNavigationDetail}
-                                coordinate={{
-                                    latitude: -16.6868555,
-                                    longitude: -49.3006254,
-                                }}
-                            >
-                                <View style={styles.mapMarkerContainer}>
-                                    <Image
-                                        style={styles.mapMarkerImage}
-                                        source={{ uri: 'https://wow.olympus.eu/webfile/img/1632/oly_testwow_stage.jpg?x=400' }}
-                                    />
-                                    <Text style={styles.mapMarkerTitle}>Mercado</Text>
-                                </View>
-                            </Marker>
+                            {points.map(point => (
+
+                                <Marker
+                                    key={String(point.id)}
+                                    style={styles.mapMarker}
+                                    onPress={() => handelNavigationDetail(point.id)}
+                                    coordinate={{
+                                        latitude: point.latitude,
+                                        longitude: point.longitude,
+                                    }}
+                                >
+                                    <View style={styles.mapMarkerContainer}>
+                                        <Image
+                                            style={styles.mapMarkerImage}
+                                            source={{ uri: point.image }}
+                                        />
+                                        <Text style={styles.mapMarkerTitle}>{point.name}</Text>
+                                    </View>
+                                </Marker>
+                            ))}
+
                         </MapView>)
                     }
 
