@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, SafeAreaView, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, SafeAreaView, Image, Linking } from 'react-native';
 import * as MailComposer from 'expo-mail-composer';
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { Feather as Icon, FontAwesome } from '@expo/vector-icons';
@@ -50,6 +50,10 @@ const Detail = () => {
         });
     }
 
+    function handleWhatsapp() {
+        Linking.openURL(`whatsapp://send?phone=${data.point.whatsapp}`);
+    }
+
 
 
     if (!data.point) {
@@ -76,7 +80,7 @@ const Detail = () => {
 
             </View>
             <View style={styles.footer}>
-                <RectButton style={styles.button} onPress={() => { }}>
+                <RectButton style={styles.button} onPress={handleWhatsapp}>
                     <FontAwesome name="whatsapp" size={20} color="#FFF" />
                     <Text style={styles.buttonText}>Whatsapp</Text>
                 </RectButton>
