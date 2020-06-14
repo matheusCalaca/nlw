@@ -77,7 +77,7 @@ const Points = () => {
             }
         }).then(response => {
             console.log(response.data);
-            
+
             setPoints(response.data);
         })
     }, []);
@@ -87,7 +87,7 @@ const Points = () => {
     }
 
     function handelNavigationDetail(id: number) {
-        navigation.navigate('Detail');
+        navigation.navigate('Detail', { point_id: id });
     }
 
     function handleSelectItem(id: number) {

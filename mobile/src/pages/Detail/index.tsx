@@ -1,33 +1,67 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, SafeAreaView, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { Feather as Icon, FontAwesome } from '@expo/vector-icons';
 import { RectButton } from 'react-native-gesture-handler';
+import api from '../../services/api';
+
+interface Params {
+    point_id: number;
+}
+
+interface Data {
+    point: {
+        image: string;
+        name: string;
+        email: string;
+        whatsapp: string;
+        city: string;
+        uf: string;
+
+    }
+    items: {
+        title: string
+    }[];
+}
 
 const Detail = () => {
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const route = useRoute();
+
+    const routeParam = route.params as Params;
+
+    const [data, setData] = useState<Data>({} as Data)
+
+    useEffect(() => {
+        api.get(`points/${routeParam.point_id}`).then(response => {
+            setData(response.data)
+        });
+    }, []);
 
     function handelNavigationBack() {
         navigation.goBack();
     }
 
+    if (!data.point) {
+        return null;
+    }
 
     return (
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <TouchableOpacity onPress={handelNavigationBack}>
                     <Icon name="arrow-left" size={20} color="#34cb79" />
                 </TouchableOpacity>
                 <Image
                     style={styles.pointImage}
-                    source={{ uri: 'https://wow.olympus.eu/webfile/img/1632/oly_testwow_stage.jpg?x=500' }}
+                    source={{ uri: data.point.image }}
                 />
-                <Text style={styles.pointName}>Mercado Joa</Text>
-                <Text style={styles.pointItems}>Bateria, Lampada, Etc</Text>
+                <Text style={styles.pointName}>{data.point.name}</Text>
+                <Text style={styles.pointItems}>{data.items.map(item => item.title).join(', ')}</Text>
 
                 <View style={styles.address}>
                     <Text style={styles.addressTitle}>Endereços</Text>
-                    <Text style={styles.addressContent}>Goiania, Goias</Text>
+                    <Text style={styles.addressContent}>{data.point.city}, {data.point.uf}</Text>
                 </View>
 
             </View>
