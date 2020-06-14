@@ -15,6 +15,9 @@ const Points = () => {
         navigation.goBack();
     }
 
+    function handelNavigationDetail() {
+        navigation.navigate('Detail');
+    }
 
     return (
         <>
@@ -37,7 +40,7 @@ const Points = () => {
                     >
                         <Marker
                             style={styles.mapMarker}
-                            onPress={() => {}}
+                            onPress={handelNavigationDetail}
                             coordinate={{
                                 latitude: -16.6868555,
                                 longitude: -49.3006254,
