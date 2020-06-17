@@ -6,6 +6,8 @@ import { LeafletMouseEvent } from 'leaflet';
 import axios from 'axios';
 
 import api from '../../services/api';
+import Dropzone from '../components/Dropzone'
+
 import './styles.css';
 import logo from '../../assets/logo.svg';
 
@@ -40,6 +42,7 @@ const CreatePoint = () => {
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
     const [selectedPosition, setSelectedPosition] = useState<[number, number]>([0, 0]);
     const [initalPosition, setInitialPosition] = useState<[number, number]>([0, 0]);
+    const [selectedFile, setselectedFile] = useState<File>();
 
     const history = useHistory();
 
@@ -124,16 +127,29 @@ const CreatePoint = () => {
         const [latitude, longitude] = selectedPosition;
         const items = selectedItems;
 
-        const data = {
-            name,
-            email,
-            whatsapp,
-            uf,
-            city,
-            latitude,
-            longitude,
-            items
-        };
+        const data = new FormData();
+
+        data.append('name', name);
+        data.append('email', email);
+        data.append('whatsapp', whatsapp);
+        data.append('uf', uf.toUpperCase());
+        data.append('city', city.toUpperCase());
+        data.append('latitude', String(latitude));
+        data.append('longitude', String(longitude));
+        data.append('items', items.join(','));
+        if (selectedFile) {
+            data.append('image', selectedFile);
+        }
+        // const data = {
+        //     name,
+        //     email,
+        //     whatsapp,
+        //     uf,
+        //     city,
+        //     latitude,
+        //     longitude,
+        //     items
+        // };
 
         await api.post('points', data);
 
@@ -152,6 +168,7 @@ const CreatePoint = () => {
             </header>
             <form onSubmit={handleSubmit}>
                 <h1>Cadastro do <br></br> ponto de coleta</h1>
+                <Dropzone onFileUploader={setselectedFile} />
                 <fieldset>
                     <legend>
                         <h2>Dados</h2>
