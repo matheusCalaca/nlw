@@ -6,11 +6,12 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { useSafeArea } from 'react-native-safe-area-context';
 import RNPickerSelect from 'react-native-picker-select';
+import api from '../../services/api'
 
 
-interface IBGEUFResponse {
-    sigla: string;
-}
+interface UFPoints {
+    uf: [];
+};
 
 interface SelectItemInterface {
     label: string,
@@ -35,9 +36,14 @@ const Home = () => {
 
 
     useEffect(() => {
-        axios.get<IBGEUFResponse[]>('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(response => {
+
+        api.get<UFPoints>('/points/uf').then(response => {
             let selectItemInterface: SelectItemInterface[] = [];
-            const ufInitials = response.data.forEach(uf => { selectItemInterface.push({ label: uf.sigla, value: uf.sigla }) });
+            const ufs = response.data.uf;
+            ufs.forEach(uf => {
+                selectItemInterface.push({ label: uf, value: uf });
+            })
+
             setUfs(selectItemInterface);
         })
     }, []);
