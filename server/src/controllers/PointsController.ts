@@ -44,13 +44,32 @@ class PointsController {
             .select('points.uf');
 
         const ufs = points.map(point => point.uf)
-
         const serializeUfs = {
             uf: ufs
         }
-
         return response.json(serializeUfs);
+    }
 
+    async indexCities(request: Request, response: Response) {
+
+        const {
+            uf
+        } = request.query;
+
+        const points = await Knex('points')
+            .where('uf', String(uf))
+            .distinct()
+            .select('points.city');
+
+        const cities = points.map(point => {
+            return point.city
+        })
+        
+        const serializeCities = {
+            cities
+        }
+
+        return response.json(serializeCities);
     }
 
     async show(request: Request, response: Response) {

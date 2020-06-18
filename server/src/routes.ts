@@ -19,6 +19,7 @@ routes.get("/items", itemsController.index);
 
 routes.get("/points", pointController.index);
 routes.get("/points/uf", pointController.indexUf);
+routes.get("/points/cities", pointController.indexCities);
 routes.get("/points/:id", pointController.show);
 
 routes.post("/points",
