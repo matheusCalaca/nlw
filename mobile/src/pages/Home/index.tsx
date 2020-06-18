@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Feather as Icon } from '@expo/vector-icons';
 import { View, Image, ImageBackground, StyleSheet, Text, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 import { useSafeArea } from 'react-native-safe-area-context';
+import RNPickerSelect from 'react-native-picker-select';
 
+
+interface IBGEUFResponse {
+    sigla: string;
+}
+
+interface SelectItemInterface {
+    label: string,
+    value: string
+}
 
 
 const Home = () => {
 
     const [uf, setUf] = useState('');
+    const [ufs, setUfs] = useState<SelectItemInterface[]>([]);
     const [city, setCity] = useState('');
 
     const navigation = useNavigation();
@@ -21,6 +33,14 @@ const Home = () => {
         });
     }
 
+
+    useEffect(() => {
+        axios.get<IBGEUFResponse[]>('https://servicodados.ibge.gov.br/api/v1/localidades/estados').then(response => {
+            let selectItemInterface: SelectItemInterface[] = [];
+            const ufInitials = response.data.forEach(uf => { selectItemInterface.push({ label: uf.sigla, value: uf.sigla }) });
+            setUfs(selectItemInterface);
+        })
+    }, []);
 
     return (
         <KeyboardAvoidingView
@@ -61,6 +81,12 @@ const Home = () => {
                         autoCapitalize='characters'
                         onChangeText={setCity}
                     />
+
+                    <RNPickerSelect
+                        onValueChange={setUf}
+                        items={ufs}
+                    />
+
 
                     <RectButton style={styles.button} onPress={handleNavigationToPoints}>
                         <View style={styles.buttonIcon}>
