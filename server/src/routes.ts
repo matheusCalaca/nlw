@@ -18,6 +18,7 @@ const itemsController = new ItemsController();
 routes.get("/items", itemsController.index);
 
 routes.get("/points", pointController.index);
+routes.get("/points/uf", pointController.indexUf);
 routes.get("/points/:id", pointController.show);
 
 routes.post("/points",

@@ -37,6 +37,21 @@ class PointsController {
         return response.json(serializedPoints);
 
     }
+    async indexUf(request: Request, response: Response) {
+
+        const points = await Knex('points')
+            .distinct()
+            .select('points.uf');
+
+        const ufs = points.map(point => point.uf)
+
+        const serializeUfs = {
+            uf: ufs
+        }
+
+        return response.json(serializeUfs);
+
+    }
 
     async show(request: Request, response: Response) {
 
