@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Image, Alert } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native'
-import * as Location from 'expo-location';
-import Constants from 'expo-constants';
 import { Feather as Icon } from '@expo/vector-icons';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import Constants from 'expo-constants';
+import * as Location from 'expo-location';
+import React, { useEffect, useState } from 'react';
+import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { SvgUri } from 'react-native-svg';
 import api from '../../services/api';

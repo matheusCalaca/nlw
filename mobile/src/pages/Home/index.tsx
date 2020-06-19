@@ -39,6 +39,22 @@ const Home = () => {
         });
     }
 
+
+
+    useEffect(() => {
+
+        api.get<UFPoints>('/points/uf').then(response => {
+            let selectItemInterface: SelectItemInterface[] = [];
+            const ufs = response.data.uf;
+            ufs.forEach(uf => {
+                selectItemInterface.push({ label: uf, value: uf });
+            })
+
+            setUfs(selectItemInterface);
+        });
+
+    }, []);
+
     useEffect(() => {
         if (uf !== "") {
             api
@@ -58,21 +74,6 @@ const Home = () => {
 
 
     }, [uf]);
-
-
-    useEffect(() => {
-
-        api.get<UFPoints>('/points/uf').then(response => {
-            let selectItemInterface: SelectItemInterface[] = [];
-            const ufs = response.data.uf;
-            ufs.forEach(uf => {
-                selectItemInterface.push({ label: uf, value: uf });
-            })
-
-            setUfs(selectItemInterface);
-        });
-    }, []);
-
 
 
     return (
@@ -112,8 +113,8 @@ const Home = () => {
                             }
                         }}
                         Icon={() => {
-                            return  <Icon name="arrow-down" style={styles.icon} color="#34cb79" />;
-                          }}
+                            return <Icon name="arrow-down" style={styles.icon} color="#34cb79" />;
+                        }}
 
                     />
 
@@ -132,8 +133,8 @@ const Home = () => {
                             }
                         }}
                         Icon={() => {
-                            return  <Icon name="arrow-down" style={styles.icon} color="#34cb79" />;
-                          }}
+                            return <Icon name="arrow-down" style={styles.icon} color="#34cb79" />;
+                        }}
 
                     />
 
