@@ -13,6 +13,10 @@ interface UFPoints {
     uf: [];
 };
 
+interface CitiesPoints {
+    cities: [];
+};
+
 interface SelectItemInterface {
     label: string,
     value: string
@@ -23,6 +27,7 @@ const Home = () => {
 
     const [uf, setUf] = useState('');
     const [ufs, setUfs] = useState<SelectItemInterface[]>([]);
+    const [cities, setCities] = useState<SelectItemInterface[]>([]);
     const [city, setCity] = useState('');
 
     const navigation = useNavigation();
@@ -33,6 +38,26 @@ const Home = () => {
             city
         });
     }
+
+    useEffect(() => {
+        if (uf !== "") {
+            api
+                .get<CitiesPoints>(`/points/cities?uf=${uf}`)
+                .then(response => {
+
+                    let selectItemInterface: SelectItemInterface[] = [];
+                    const cities = response.data.cities;
+                    cities.forEach(city => {
+                        selectItemInterface.push({ label: city, value: city });
+                    })
+
+                    setCities(selectItemInterface);
+                })
+        }
+        return;
+
+
+    }, [uf]);
 
 
     useEffect(() => {
@@ -45,8 +70,10 @@ const Home = () => {
             })
 
             setUfs(selectItemInterface);
-        })
+        });
     }, []);
+
+
 
     return (
         <KeyboardAvoidingView
@@ -70,27 +97,44 @@ const Home = () => {
                     </View>
                 </View>
                 <View style={styles.footer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Digite a UF"
-                        value={uf}
-                        maxLength={2}
-                        autoCapitalize='characters'
-                        onChangeText={setUf}
-
-                    />
-
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Digite a Cidade"
-                        value={city}
-                        autoCapitalize='characters'
-                        onChangeText={setCity}
-                    />
-
                     <RNPickerSelect
                         onValueChange={setUf}
                         items={ufs}
+                        placeholder={{
+                            label: 'selecione um Estado',
+                            value: null,
+                            color: '#9EA0A4',
+                        }}
+                        style={{
+                            ...styles, iconContainer: {
+                                top: 10,
+                                right: 12,
+                            }
+                        }}
+                        Icon={() => {
+                            return  <Icon name="arrow-down" style={styles.icon} color="#34cb79" />;
+                          }}
+
+                    />
+
+                    <RNPickerSelect
+                        onValueChange={setCity}
+                        items={cities}
+                        placeholder={{
+                            label: `selecione uma Cidade `,
+                            value: null,
+                            color: '#9EA0A4',
+                        }}
+                        style={{
+                            ...styles, iconContainer: {
+                                top: 10,
+                                right: 12,
+                            }
+                        }}
+                        Icon={() => {
+                            return  <Icon name="arrow-down" style={styles.icon} color="#34cb79" />;
+                          }}
+
                     />
 
 
@@ -150,6 +194,21 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         paddingHorizontal: 24,
         fontSize: 16,
+    },
+
+    inputAndroid: {
+        height: 60,
+        backgroundColor: '#FFF',
+        marginBottom: 8,
+        paddingHorizontal: 24,
+        fontSize: 16,
+        borderRadius: 50,
+    },
+    icon: {
+        flex: 1,
+        margin: 10,
+        color: '#9EA0A4',
+        fontSize: 20,
     },
 
     button: {
